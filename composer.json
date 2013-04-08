@@ -1,0 +1,21 @@
+{
+    "name": "jimbojsb/emogrify",
+    "description": "CSS inliner for HTML Emails. Great with Swiftmailer and Zend Mail",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Josh Butts",
+            "email": "josh@joshbutts.com",
+            "role": "packager"
+        },
+        {
+            "name": "Pelagro Design",
+            "role": "author"
+        }
+    ],
+    "autoload": {
+        "psr-0": {
+            "Emogrify": "src/"
+        }
+    }
+}
