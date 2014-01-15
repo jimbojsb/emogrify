@@ -15,6 +15,7 @@ class Emogrifier {
     private $css = '';
     private $unprocessableHTMLTags = array('wbr');
     private $caches = array();
+    private $ignoreStyleTags = false;
 
     // this attribute applies to the case where you want to preserve your original text encoding.
     // by default, emogrifier translates your text into HTML entities for two reasons:
@@ -33,6 +34,11 @@ class Emogrifier {
     public function setCSS($css = '') {
         $this->css = $css;
         $this->clearCache(CACHE_CSS);
+    }
+
+    public function setIgnoreStyleTags($ignore = true)
+    {
+        $this->ignoreStyleTags = $ignore;
     }
 
     public function clearCache($key = null) {
@@ -100,13 +106,17 @@ class Emogrifier {
         // grab any existing style blocks from the html and append them to the existing CSS
         // (these blocks should be appended so as to have precedence over conflicting styles in the existing CSS)
         $css = $this->css;
-        $nodes = @$xpath->query('//style');
-        foreach ($nodes as $node) {
-            // append the css
-            $css .= "\n\n{$node->nodeValue}";
-            // remove the <style> node
-            $node->parentNode->removeChild($node);
+
+        if (!$this->ignoreStyleTags) {
+            $nodes = @$xpath->query('//style');
+            foreach ($nodes as $node) {
+                // append the css
+                $css .= "\n\n{$node->nodeValue}";
+                // remove the <style> node
+                $node->parentNode->removeChild($node);
+            }
         }
+
 
         // filter the CSS
         $search = array(
